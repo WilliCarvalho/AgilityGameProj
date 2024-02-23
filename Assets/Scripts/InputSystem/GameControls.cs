@@ -35,6 +35,15 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""RestartGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""438e61a2-b245-48a1-a732-40e66030f897"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -103,6 +112,28 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f012ecd7-29b3-4d29-ae11-9bd835b76d85"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RestartGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c67d9821-61d7-4ea7-a790-b9de4f1066c2"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RestartGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -112,6 +143,7 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
+        m_Player_RestartGame = m_Player.FindAction("RestartGame", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -174,11 +206,13 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
+    private readonly InputAction m_Player_RestartGame;
     public struct PlayerActions
     {
         private @GameControls m_Wrapper;
         public PlayerActions(@GameControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
+        public InputAction @RestartGame => m_Wrapper.m_Player_RestartGame;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -191,6 +225,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @RestartGame.started += instance.OnRestartGame;
+            @RestartGame.performed += instance.OnRestartGame;
+            @RestartGame.canceled += instance.OnRestartGame;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -198,6 +235,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @RestartGame.started -= instance.OnRestartGame;
+            @RestartGame.performed -= instance.OnRestartGame;
+            @RestartGame.canceled -= instance.OnRestartGame;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -218,5 +258,6 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnRestartGame(InputAction.CallbackContext context);
     }
 }

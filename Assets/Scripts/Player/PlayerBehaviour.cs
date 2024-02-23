@@ -9,8 +9,14 @@ public class PlayerBehaviour : MonoBehaviour
     private Vector3 moveDirection;
     private GameControls playerInput;
 
+    public static PlayerBehaviour instance;
+
     private void Awake()
     {
+        if (instance != null) Destroy(this.gameObject);
+        
+        instance = this;
+
         playerInput = new GameControls();
         playerInput.Enable();
         SetupInputs();
@@ -29,12 +35,27 @@ public class PlayerBehaviour : MonoBehaviour
         moveDirection.y = 0f;
         moveDirection.z = InputDirection.y;
     }
+
+    private void RestartScene(InputAction.CallbackContext context)
+    {
+        SceneManage.instance.RestartGame();
+    }
+
+    public void DisableInput()
+    {
+        playerInput.Player.Move.Disable();
+    }
+
     private void SetupInputs()
     {
         playerInput.Player.Move.started += MovePlayer;
         playerInput.Player.Move.performed += MovePlayer;
         playerInput.Player.Move.canceled += MovePlayer;
+
+        playerInput.Player.RestartGame.started += RestartScene;
     }
+
+    
 
     private void OnDisable()
     {

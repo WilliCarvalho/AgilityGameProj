@@ -9,7 +9,9 @@ public class Obstacle : MonoBehaviour
     {
         if (collision.gameObject.name.Contains("Player"))
         {
-            print("You touched me, loser!");
+            Timer.isTimerEnable = false;
+            UIManager.instance.ShowLoserText();
+            PlayerBehaviour.instance.DisableInput();
         }
     }
 }
