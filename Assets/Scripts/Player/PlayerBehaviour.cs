@@ -24,16 +24,16 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void Update()
     {
-        transform.Translate(moveDirection * velocity * Time.deltaTime);
+        transform.Translate(moveDirection * (velocity * Time.deltaTime));
     }
 
     private void MovePlayer(InputAction.CallbackContext context)
     {
-        Vector2 InputDirection = context.ReadValue<Vector2>();
+        Vector2 inputDirection = context.ReadValue<Vector2>();
 
-        moveDirection.x = InputDirection.x;
+        moveDirection.x = inputDirection.x;
         moveDirection.y = 0f;
-        moveDirection.z = InputDirection.y;
+        moveDirection.z = inputDirection.y;
     }
 
     private void RestartScene(InputAction.CallbackContext context)

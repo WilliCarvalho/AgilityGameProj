@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class MovingObstacle : Obstacle
@@ -17,27 +16,45 @@ public class MovingObstacle : Obstacle
         canSwitch = false;
     }
 
-    private void FixedUpdate()
+    private void Update()
+    {
+        if (CheckCanMove() == false) return;
+
+        CheckAndHandleMovement();
+
+        CheckAndHandleReachedPosition();
+        
+    }
+    
+    private bool CheckCanMove()
     {
         if (canMove == false)
         {
             TimeCount();
-            return;
+            return false;
         }
 
+        return true;
+    }
+    
+    private void CheckAndHandleMovement()
+    {
         if (canSwitch == false)
         {
             transform.position = Vector3.MoveTowards(transform.position, 
-                                                     position2.position, 
-                                                     velocity * Time.deltaTime);
+                position2.position, 
+                velocity * Time.deltaTime);
         }
         else if (canSwitch == true)
         {
             transform.position = Vector3.MoveTowards(transform.position,
-                                                     position1.position,
-                                                     velocity * Time.deltaTime);
+                position1.position,
+                velocity * Time.deltaTime);
         }
-
+    }
+    
+    private void CheckAndHandleReachedPosition()
+    {
         if(transform.position == position1.position)
         {
             canMove = false;
